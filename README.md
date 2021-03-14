@@ -4,7 +4,9 @@ Regression Project: Estimating Home Value
 
 #### Project Summary:
 
-The Zestimate’s accuracy depends on location and the availability of data in an area. Some areas have more detailed home information available — such as square footage and number of bedrooms or bathrooms — and other areas do not. The more data available, the more accurate the Zestimate value will be.  The Zillow Data Science Team wants to be able to predict the values of single unit properties that the taxdistrict assesses using the property data from transactions during May and June 2017. 
+Zillow is the leading real estate and rental marketplace dedicated to empowering consumers with data, inspiration and knowledge around the place they call home, and connecting them with the best local professionals who can help. 
+
+The Zillow Data Science Team wants to be able to predict the values of single unit properties that the taxdistrict assesses using the property data from transactions during May and June 2017. 
 
 Data Source: Zillow database on Codeup's data server.
 
@@ -15,7 +17,7 @@ Data Source: Zillow database on Codeup's data server.
 
 
 ### Factors contributing to tax value include:
-- 
+
 
 #### Recommendation:
 
@@ -26,31 +28,33 @@ All files referenced in this presentation are available in the github repository
 
 
 #### Progression through the Data Science Pipeline: 
-Each step in the our process is recorded and staged on a Trello board at: https://trello.com/b/vOXbVcbl
+``` PLAN -> ACQUIRE -> PREPARE -> EXPLORE -> MODEL -> DELIVER ```
 
-Plan:
+Each step in the our process is recorded and staged on a Trello board at: https://trello.com/b/l8KSm6ZM
+
+```Plan:```
 - Set up GitHub repo, readme, env.
 - Use Sequel to investigate the database and compose an appropriate query
 - Brainstorm a list of questions and form hypotheses about how variables might impact one another. 
 
-Acquire: 
+```Acquire:```
 - Read data from Zillow’s own database located on Codeup’s SQL Server into a Pandas dataframe to be analyzed using Python.
 - Created a function, acquire.py, as a reproducible component for acquiring necessary data
 
-Prepare:
+```Prepare:```
 - Carefully reviewed data, identifying any missing, erroneous, or invalid values. 
 - Explored value counts of the dataframe and visualized univariate data 
 - Data was scaled as necessary.
 - Data was split into train, validate and test sets, and ready for analysis/modeling.
 - Created a function, prep.py, as a reproducible component that cleans/prepares data for analysis and modeling by: handling missing values, adjusts data types, handles any data integrity and scales data, as necessary.
 
-Explore:
+```Explore:```
 - Visualize all combination of variables to explore relationships.
 - Developed hypotheses and ran statistical tests: t-test and correlation, to accept or reject null hypotheses.
 - Tested for independent variables that correlate with tax value.
 - Summarized takeaways and conclusions.
 
-Model: 
+```Model:``` 
 - Developed a model that established baseline.
 - Developed a regression model that performs better than the baseline
 - Documented algorithms and hyperparameters used.
