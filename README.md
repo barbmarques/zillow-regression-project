@@ -8,7 +8,7 @@ Zillow is the leading real estate and rental marketplace dedicated to empowering
 
 The Zillow Data Science Team wants to be able to predict the values of single unit properties that the taxdistrict assesses using the property data from transactions during May and June 2017. 
 
-Data Source: Zillow database on Codeup's data server.
+Data Source: Zillow database on Codeup's data server. 
 
 #### Project Goals:
 - Predict the values of single unit properties that that the tax district assess based on data of property transaction in May through June 2017. 
@@ -17,6 +17,8 @@ Data Source: Zillow database on Codeup's data server.
 
 
 ### Factors contributing to tax value include:
+
+Properties are all located in Los Angeles County, Orange County or Ventura County, California
 
 
 #### Recommendation:
@@ -30,7 +32,7 @@ All files referenced in this presentation are available in the github repository
 #### Progression through the Data Science Pipeline: 
 ``` PLAN -> ACQUIRE -> PREPARE -> EXPLORE -> MODEL -> DELIVER ```
 
-Each step in the our process is recorded and staged on a Trello board at: https://trello.com/b/l8KSm6ZM
+Each step in the process is recorded and staged on a Trello board at: https://trello.com/b/l8KSm6ZM
 
 ```Plan:```
 - Set up GitHub repo, readme, env.
@@ -63,16 +65,20 @@ Each step in the our process is recorded and staged on a Trello board at: https:
 - Created model.py as a reproducible component, containing functions to fit, predict and evaluate the final model on the test data set. 
 
 
-#### Instructions for Reproducing Our Findings:
+#### Instructions for Reproducing My Findings:
 
-1.  Download the following files from https://github.com/barbmarques/zillow-regression-project to your working directory:  
+1.  Start by cloning the github repository on your From your terminal command line, type git clone git@github.com:barbmarques/zillow-regression-project.git
+
+2.  Download the following files from https://github.com/barbmarques/zillow-regression-project to your working directory:  
  - Zillow.ipynb
+ - wrangle.py
+ 
  
 
-2.  You will also need you a copy of your personal env file in your working directory:
+3.  You will also need you a copy of your personal env file in your working directory:
  - This should contain your access information (host, user, password) to access Codeup's database in MySQL
 
-3. Run the Jupyter notebook, cell by cell, allowing time for visualizations to generate.
+4. Run the Jupyter notebook, cell by cell, allowing time for visualizations to generate.
 
 4. To access the property value predictions in a csv format, download ```property_value_predictions
 .csv```. 
@@ -82,17 +88,19 @@ Each step in the our process is recorded and staged on a Trello board at: https:
 
 | Attribute | Definition | Data Type |
 | ----- | ----- | ----- |
-| **tax_value**| The total tax assessed value of the parcel | int64 |
+| **tax_value**| The 2017 total tax assessed value of the parcel | int64 |
 |parcel_id| Unique identifier for parcels (lots) | object |
 |bathrooms| Number of bathrooms in home, including fractional bathrooms | int64 |
-|square_feet|Calculated total finished living area of the home||
+|square_feet|Calculated total finished living area of the home| int64|
 |bedrooms|Number of bedrooms in home| int64 |
 |lot_size|Area of the lot in square feet| int64 |
-|zip_code| Zip code in which the home is located| float64 |
-|county| County in which the home is located | |
-|yearbuilt|The year the principal residence was built| float64 | 
-|taxes|The total property tax assessed for the assessment year||
-|assessmentyear|The year of the property tax assessment||
+|zip_code| Zip code in which the home is located| int64 |
+|fips_code|Federal Information Processing Standard Code. This code identifies the county in which the home is located () County in which the home is located. 6037: Los Angeles County, 6059: Orange County, 6111: Ventura County|int64 |
+|age|Number of years from original construction until the home sold in 2017.| int64 | 
+|taxes|The total property tax assessed for the assessment year|float64|
+
+
+|assessmentyear|The year of the property tax assessment ||
 |building_quality|Overall assessment of condition of the building from best (lowest) to worst (highest)||
 
 
