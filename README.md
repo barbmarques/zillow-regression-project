@@ -95,13 +95,8 @@ Each step in the process is recorded and staged on a Trello board at: https://tr
 |bedrooms|Number of bedrooms in home| int64 |
 |lot_size|Area of the lot in square feet| int64 |
 |zip_code| Zip code in which the home is located| int64 |
-|fips_code|Federal Information Processing Standard Code. This code identifies the county in which the home is located () County in which the home is located. 6037: Los Angeles County, 6059: Orange County, 6111: Ventura County|int64 |
+|fips|Federal Information Processing Standard Code. This code identifies the county in which the home is located. 6037: Los Angeles County, 6059: Orange County, 6111: Ventura County|int64 |
 |age|Number of years from original construction until the home sold in 2017.| int64 | 
 |taxes|The total property tax assessed for the assessment year|float64|
-
-
-|assessmentyear|The year of the property tax assessment ||
-|building_quality|Overall assessment of condition of the building from best (lowest) to worst (highest)||
-
 
 
