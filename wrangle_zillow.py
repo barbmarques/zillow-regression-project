@@ -2,7 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import sklearn.preprocessing
-from sklearn.preprocessing import LabelEncoder, QuantileTransformer
+from sklearn.preprocessing import StandardScaler, LabelEncoder, QuantileTransformer
 from sklearn.model_selection import train_test_split
 import numpy as np
 from scipy import stats
@@ -14,7 +14,7 @@ def get_connection(db, user=env.user, host=env.host, password=env.password):
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-def acquire(db):
+def acquire(df):
     def get_connection(db, user=env.user, host=env.host, password=env.password):
          return f'mysql+pymysql://{user}:{password}@{host}/{db}'
     query = '''
@@ -34,6 +34,7 @@ def acquire(db):
             AND ((propertylandusetypeid IN (261, 262, 263, 264, 273, 274, 276, 279)) or (unitcnt = 1))
             AND (bedroomcnt > 0)
             AND (bathroomcnt > 0)
+            AND (regionidzip <= 99999)
             AND (yearbuilt IS NOT NULL)
             AND (calculatedfinishedsquarefeet IS NOT NULL)
             AND (lotsizesquarefeet IS NOT NULL)
@@ -55,7 +56,6 @@ def prep_zillow(df):
     data types as needed.
     
     '''
-    
     # rename columns
     df = df.rename(columns={"bedroomcnt": "bedrooms", 
                              "bathroomcnt": "bathrooms", 
@@ -69,26 +69,21 @@ def prep_zillow(df):
                              "lotsizesquarefeet":"lot_size", 
                              "yearbuilt":"age"})
                         
-     #reset index to parcel_id
-     df = df.set_index('parcel_id')
+    #reset index to parcel_id
+    df = df.set_index('parcel_id')
           
-     #convert year built to age in years
-     df.age = 2017 - df.age
+    #convert year built to age in years
+    df.age = 2017 - df.age
 
-     # Change datatypes
-     df.bedrooms = df.bedrooms.astype('int64')
-     
-     df.age = df.age.astype('int64')
-     
-     df.square_feet = df.square_feet.astype('int64')
-     
-     df.lot_size = df.lot_size.astype('int64')
-     
-     df.fips = df.fips.astype('int64') 
-    
-     df.zip_code = df.zip_code.astype('int64')
-    
-     return
+    # Change datatypes
+    df.bathrooms = df.bathrooms.astype('int64')
+    df.bedrooms = df.bedrooms.astype('int64')
+    df.age = df.age.astype('int64')
+    df.square_feet = df.square_feet.astype('int64')
+    df.lot_size = df.lot_size.astype('int64')
+    df.fips = df.fips.astype('int64') 
+    df.zip_code = df.zip_code.astype('int64')
+    return df
      
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -120,7 +115,7 @@ def train_validate_test_split(df, target, seed=123):
     X_test = test.drop(columns=[target])
     y_test = test[target]
 
-    return X_train, y_train, X_validate, y_validate, X_test, y_test
+    return X_train, X_validate, X_test, y_train, y_validate, y_test
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -138,7 +133,7 @@ def min_max_scale(X_train, X_validate, X_test, numeric_cols):
     # if copy = false, inplace row normalization happens and avoids a copy (if the input is already a numpy array).
 
 
-    scaler = MinMaxScaler(copy=True).fit(X_train[numeric_cols])
+    scaler = sklearn.preprocessing.MinMaxScaler(copy=True).fit(X_train[numeric_cols])
 
     #scale X_train, X_validate, X_test using the mins and maxes stored in the scaler derived from X_train. 
     # 
