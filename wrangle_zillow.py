@@ -31,9 +31,15 @@ def acquire(df):
             FROM properties_2017
             JOIN predictions_2017 using(parcelid)
             WHERE (transactiondate between "2017-05-01" and "2017-08-31")
-            AND ((propertylandusetypeid IN (261, 262, 263, 264, 273, 274, 276, 279)) or (unitcnt = 1))
+            AND ((propertylandusetypeid IN (261, 262, 264, 273, 274, 276, 279)) or (unitcnt = 1))
+            AND (calculatedfinishedsquarefeet >= 700)
+            AND (calculatedfinishedsquarefeet <= 5500)
+            AND (taxvaluedollarcnt <= 3100000)
+            AND (taxvaluedollarcnt >= 90000)
             AND (bedroomcnt > 0)
+            AND (bedroomcnt < 8)
             AND (bathroomcnt > 0)
+            AND (bathroomcnt < 7)
             AND (regionidzip <= 99999)
             AND (yearbuilt IS NOT NULL)
             AND (calculatedfinishedsquarefeet IS NOT NULL)
@@ -41,6 +47,7 @@ def acquire(df):
             AND (taxvaluedollarcnt IS NOT NULL)
             AND (taxamount IS NOT NULL)
             AND (regionidzip IS NOT NULL)
+           
             '''
 
     df = pd.read_sql(query, get_connection('zillow'))
@@ -60,13 +67,13 @@ def prep_zillow(df):
     df = df.rename(columns={"bedroomcnt": "bedrooms", 
                              "bathroomcnt": "bathrooms", 
                              "calculatedfinishedsquarefeet":"square_feet", 
+                             "lotsizesquarefeet":"lot_size",
                              "taxamount": "taxes",
                              "taxvaluedollarcnt": "tax_value", 
                              "parcelid":"parcel_id",
                              "buildingqualitytypeid":"building_quality",
                              "regionidcounty":"county",
                              "regionidzip":"zip_code",
-                             "lotsizesquarefeet":"lot_size", 
                              "yearbuilt":"age"})
                         
     #reset index to parcel_id
@@ -80,7 +87,6 @@ def prep_zillow(df):
     df.bedrooms = df.bedrooms.astype('int64')
     df.age = df.age.astype('int64')
     df.square_feet = df.square_feet.astype('int64')
-    df.lot_size = df.lot_size.astype('int64')
     df.fips = df.fips.astype('int64') 
     df.zip_code = df.zip_code.astype('int64')
     return df
