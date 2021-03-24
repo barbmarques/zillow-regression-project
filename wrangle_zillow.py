@@ -15,6 +15,16 @@ def get_connection(db, user=env.user, host=env.host, password=env.password):
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 def acquire(df):
+    '''
+    This function connects to Codeup's SQL Server using given parameters in the user's
+    env file.  It then acquires data from Zillow's database using a SQL query that
+    selects ten specific features from the 2017 properties and predictions tables. 
+    The query limits transaction dates to May - August, 2017. It specific property 
+    use types to represent single unit properties and controls for outliers on
+    square footage, bathroom and bedroom counts, and zip codes. Observations 
+    with null values in key columns are not pulled in.    
+    '''
+    
     def get_connection(db, user=env.user, host=env.host, password=env.password):
          return f'mysql+pymysql://{user}:{password}@{host}/{db}'
     query = '''
@@ -162,3 +172,30 @@ def min_max_scale(X_train, X_validate, X_test, numeric_cols):
 
     
     return X_train_scaled, X_validate_scaled, X_test_scaled
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+def remove_tax_value_outliers(df):
+    '''
+    This function removes outliers in tax values in the Zillow data to prepare the data to 
+    for calculating the distribution of tax rates in Orange County, Ventura County, and Los
+    Angeles County, California.
+    '''
+    
+    # Calculate the interquartile range for your column
+
+    q1, q3 = df.tax_value.quantile([.25, .75])
+    
+    iqr = q3 - q1
+    
+    # Create variables holding upper and lower cutoff values using common formula. Tweak as you like.
+    
+    tax_upperbound = q3 + 3.5 * iqr
+    
+    #tax_lowerbound = q1 - 3 * iqr ==> The lowerbound is negative and since there are no negative values, 
+    # there are no lowerbound outliers
+    
+    # Filter the column using variables and reassign to your dataframe.
+    tax_dist_a = tax_dist[tax_dist.tax_value < tax_upperbound]
+    return tax_dist_a
